@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Applayout from "../components/Applayout";
 
-const Home = () => {
+const Profile = () => {
   return (
     <>
       <Head>
@@ -14,9 +14,9 @@ const Home = () => {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.js" />
       </Head>
       <Applayout>
-        <div>Hello Next!</div>
+        <div>프로필</div>
       </Applayout>
     </>
   );
 };
-export default Home;
+export default Profile;
