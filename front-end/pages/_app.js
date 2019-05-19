@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Applayout from "../components/Applayout";
+import PropTypes from "prop-types";
 
 const Sns = ({ Component }) => {
   return (
@@ -18,6 +19,10 @@ const Sns = ({ Component }) => {
       </Applayout>
     </>
   );
+};
+
+Sns.propTypes = {
+  Component: PropTypes.node
 };
 
 export default Sns;

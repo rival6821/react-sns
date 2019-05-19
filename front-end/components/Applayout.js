@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { Menu, Input, Button } from "antd";
+import PropTypes from "prop-types";
 
-const Applayout = props => {
+const Applayout = ({ children }) => {
   return (
     <div>
       <Menu mode="horizontal">
@@ -25,9 +26,13 @@ const Applayout = props => {
           <Button>회원가입</Button>
         </a>
       </Link>
-      {props.children}
+      {children}
     </div>
   );
+};
+
+Applayout.propTypes = {
+  children: PropTypes.node
 };
 
 export default Applayout;
