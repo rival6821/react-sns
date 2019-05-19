@@ -1,7 +1,16 @@
 import React from "react";
 import Link from "next/link";
-import { Menu, Input, Button } from "antd";
+import { Menu, Input, Row, Col, Card, Avatar } from "antd";
 import PropTypes from "prop-types";
+import LoginForm from "./LoginForm";
+
+const dummy = {
+  nickname: "일훈이",
+  Post: [],
+  followings: [],
+  followers: [],
+  isLoggenIn: false
+};
 
 const Applayout = ({ children }) => {
   return (
@@ -21,12 +30,45 @@ const Applayout = ({ children }) => {
           <Input.Search style={{ verticalAlign: "middle" }} enterButton />
         </Menu.Item>
       </Menu>
-      <Link href="/signup">
-        <a>
-          <Button>회원가입</Button>
-        </a>
-      </Link>
-      {children}
+
+      <Row gutter={8}>
+        <Col xs={24} md={6}>
+          {dummy.isLoggenIn ? (
+            <Card
+              actions={[
+                <div key="twit">
+                  짹짹
+                  <br />
+                  {dummy.Post.length}
+                </div>,
+                <div key="following">
+                  팔로잉
+                  <br />
+                  {dummy.followings.length}
+                </div>,
+                <div key="follower">
+                  팔로워
+                  <br />
+                  {dummy.followers.length}
+                </div>
+              ]}
+            >
+              <Card.Meta
+                avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
+                title={dummy.nickname}
+              />
+            </Card>
+          ) : (
+            <LoginForm />
+          )}
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          세번째
+        </Col>
+      </Row>
     </div>
   );
 };

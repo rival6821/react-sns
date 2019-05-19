@@ -22,7 +22,7 @@ const Sns = ({ Component }) => {
 };
 
 Sns.propTypes = {
-  Component: PropTypes.node
+  Component: PropTypes.elementType
 };
 
 export default Sns;
