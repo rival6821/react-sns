@@ -4,14 +4,19 @@ import Head from "next/head";
 import { Form, Input, Checkbox, Button } from "antd";
 
 const SignUp = () => {
-  const [id, setId] = useState("");
-  const [nick, setNick] = useState("");
-  const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [termError, setTermError] = useState(false);
 
   const onSubmit = e => {
     e.preventDefault();
+    if (password !== passwordCheck) {
+      return setPasswordError(true);
+    }
+    if (!term) {
+      return setTermError(true);
+    }
     console.log({
       id,
       nick,
@@ -21,24 +26,29 @@ const SignUp = () => {
     });
   };
 
-  const onChangeId = e => {
-    setId(e.target.value);
+  // custom hook
+  const useInput = (initValue = null) => {
+    const [value, setter] = useState(initValue);
+    const handler = e => {
+      setter(e.target.value);
+    };
+    return [value, handler];
   };
 
-  const onChangeNick = e => {
-    setNick(e.target.value);
-  };
-
-  const onChangePassword = e => {
-    setPassword(e.target.value);
-  };
+  const [id, onChangeId] = useInput("");
+  const [nick, onChangeNick] = useInput("");
+  const [password, onChangePassword] = useInput("");
 
   const onChangePasswordCheck = e => {
-    setPasswordCheck(e.target.value);
+    let value = e.target.value;
+    setPasswordError(value !== password);
+    setPasswordCheck(value);
   };
 
   const onChangeTerm = e => {
-    setTerm(!e.target.value);
+    let value = e.target.value;
+    setTerm(!value);
+    setTermError(value);
   };
 
   return (
@@ -56,12 +66,17 @@ const SignUp = () => {
           <div>
             <label htmlFor="user-id">아이디</label>
             <br />
-            <Input name="user-id" required onChange={onChangeId} />
+            <Input name="user-id" required onChange={onChangeId} value={id} />
           </div>
           <div>
             <label htmlFor="user-nick">닉네임</label>
             <br />
-            <Input name="user-nick" required onChange={onChangeNick} />
+            <Input
+              name="user-nick"
+              required
+              onChange={onChangeNick}
+              value={nick}
+            />
           </div>
           <div>
             <label htmlFor="user-password">비밀번호</label>
@@ -71,6 +86,7 @@ const SignUp = () => {
               type="password"
               required
               onChange={onChangePassword}
+              value={password}
             />
           </div>
           <div>
@@ -81,14 +97,21 @@ const SignUp = () => {
               type="password"
               required
               onChange={onChangePasswordCheck}
+              value={passwordCheck}
             />
+            {passwordError && (
+              <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다</div>
+            )}
           </div>
           <div>
             <Checkbox name="user-term" onChange={onChangeTerm} value={term}>
               약관에 동의합니다
             </Checkbox>
+            {termError && (
+              <div style={{ color: "red" }}>약관에 동의하셔야 합니다</div>
+            )}
           </div>
-          <div>
+          <div style={{ marginTop: 10 }}>
             <Button htmlType="submit" type="primary">
               가입하기
             </Button>
