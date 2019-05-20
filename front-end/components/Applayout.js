@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Menu, Input, Row, Col, Card, Avatar } from "antd";
+import UserProfile from "../components/UserProfile";
+import { Menu, Input, Row, Col } from "antd";
 import PropTypes from "prop-types";
 import LoginForm from "./LoginForm";
 
@@ -33,34 +34,7 @@ const Applayout = ({ children }) => {
 
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {dummy.isLoggenIn ? (
-            <Card
-              actions={[
-                <div key="twit">
-                  짹짹
-                  <br />
-                  {dummy.Post.length}
-                </div>,
-                <div key="following">
-                  팔로잉
-                  <br />
-                  {dummy.followings.length}
-                </div>,
-                <div key="follower">
-                  팔로워
-                  <br />
-                  {dummy.followers.length}
-                </div>
-              ]}
-            >
-              <Card.Meta
-                avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
-                title={dummy.nickname}
-              />
-            </Card>
-          ) : (
-            <LoginForm />
-          )}
+          {dummy.isLoggenIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

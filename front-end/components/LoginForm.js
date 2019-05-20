@@ -35,7 +35,7 @@ const LoginForm = () => {
           type="password"
         />
       </div>
-      <div>
+      <div style={{ marginTop: "10px" }}>
         <Button htmlType="submit" type="primary" loading={false}>
           로그인
         </Button>
