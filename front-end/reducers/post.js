@@ -1,5 +1,17 @@
 export const initialState = {
-  mainPosts: []
+  mainPosts: [
+    {
+      User: {
+        id: 1,
+        nickname: "테스터"
+      },
+      createdAt: "2019-01-01",
+      content: "테스트 게시글입니다",
+      img:
+        "https://steemitimages.com/DQmd6twoohmFdKcACummtqLmXD913ss18quvY7epxN8akpo/image.png"
+    }
+  ],
+  imagePaths: []
 };
 
 export const ADD_POST = "ADD_POST";

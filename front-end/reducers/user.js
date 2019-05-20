@@ -1,6 +1,13 @@
+const dummyUser = {
+  nickname: "일훈이",
+  Post: [],
+  followings: [],
+  followers: []
+};
+
 export const initialState = {
   isLoggedIn: false,
-  user: {}
+  user: null
 };
 
 export const LOG_IN = "LOG_IN";
@@ -8,9 +15,7 @@ export const LOG_OUT = "LOG_OUT";
 
 export const loginAction = {
   type: LOG_IN,
-  data: {
-    nickname: "후니"
-  }
+  data: dummyUser
 };
 
 export const logoutAction = {
