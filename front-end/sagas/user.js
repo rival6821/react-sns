@@ -1,4 +1,15 @@
-import { all, fork, takeLatest, call, put, take } from "redux-saga/effects";
+import {
+  all,
+  fork,
+  takeLatest,
+  call,
+  put,
+  take,
+  takeEvery
+} from "redux-saga/effects";
+// fork : 함수실행, 비동기, 순서 필요없음
+// call : 함수실행, 동기, 응답을 받고 진행
+
 import {
   LOG_IN,
   LOG_IN_SUCCESS,
@@ -25,16 +36,17 @@ function* login() {
 }
 
 // LOG_IN액션이 실행되면 LOG_IN_SUCCESS액션이 자동으로 실행된다.
-// 한번만 하고 사라짐 계속 반복되게 하려면 while문 적용해야함
+// 한번만 하고 사라짐 계속 반복되게 하려면 while문 적용해야함 or takeEvery, takeLatest
+// takeEvery 는 누적O
+// takeLatest 는 누적x, 이전꺼가 안끈나면 이전거 취소
 function* watchLogin() {
-  while (true) {
-    yield take(LOG_IN);
-    // put은 dispatch랑 동일
+  yield takeLatest(LOG_IN, loginSuccess);
+}
 
-    yield put({
-      type: LOG_IN_SUCCESS
-    });
-  }
+function* loginSuccess() {
+  yield put({
+    type: LOG_IN_SUCCESS
+  });
 }
 
 function* helloSaga() {
