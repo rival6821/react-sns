@@ -5,25 +5,27 @@ import {
   call,
   put,
   take,
-  takeEvery
+  takeEvery,
+  delay
 } from "redux-saga/effects";
 // fork : 함수실행, 비동기, 순서 필요없음
 // call : 함수실행, 동기, 응답을 받고 진행
 
 import {
-  LOG_IN,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
-  HELLO,
   SIGN_UP_REQUREST,
   SIGN_UP_SUCCESS,
-  SIGN_UP_FAILURE
+  SIGN_UP_FAILURE,
+  LOG_IN_REQUEST
 } from "../reducers/user";
 
 import axios from "axios";
 
-function* loginAPI() {
+function loginAPI() {
   // 서버에 요청을 보내는 부분
+  // return axios.post("/join");
+  throw new Error("에러에러");
 }
 
 function* login() {
@@ -35,7 +37,8 @@ function* login() {
   } catch (e) {
     console.error(e);
     yield put({
-      type: LOG_IN_FAILURE
+      type: LOG_IN_FAILURE,
+      error: e
     });
   }
 }
@@ -45,21 +48,7 @@ function* login() {
 // takeEvery 는 누적O
 // takeLatest 는 누적x, 이전꺼가 안끈나면 이전거 취소
 function* watchLogin() {
-  yield takeLatest(LOG_IN, loginSuccess);
-}
-
-function* loginSuccess() {
-  yield put({
-    type: LOG_IN_SUCCESS
-  });
-}
-
-function* helloSaga() {
-  console.log("before");
-  while (true) {
-    yield take(HELLO);
-    console.log("hello");
-  }
+  yield takeLatest(LOG_IN_REQUEST, login);
 }
 
 function* watchSignUp() {
@@ -73,14 +62,17 @@ function singUpAPI() {
 
 function* signUp() {
   try {
-    yield call(singUpAPI);
+    //yield call(singUpAPI);
+    yield delay(2000);
+    throw new Error("에러에러");
     yield put({
       type: SIGN_UP_SUCCESS
     });
   } catch (e) {
     console.error(e);
     yield put({
-      type: SIGN_UP_FAILURE
+      type: SIGN_UP_FAILURE,
+      error: e
     });
   }
 }
