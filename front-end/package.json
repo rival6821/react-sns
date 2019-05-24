@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "antd": "^3.18.1",
+    "axios": "^0.18.0",
     "next": "^8.1.0",
     "next-redux-wrapper": "^3.0.0-alpha.2",
     "prop-types": "^15.7.2",
@@ -23,10 +24,10 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "nodemon": "^1.19.0",
-    "webpack": "^4.31.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-react-hooks": "^1.6.0"
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "nodemon": "^1.19.0",
+    "webpack": "^4.31.0"
   }
 }

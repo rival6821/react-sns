@@ -14,8 +14,13 @@ import {
   LOG_IN,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
-  HELLO
+  HELLO,
+  SIGN_UP_REQUREST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE
 } from "../reducers/user";
+
+import axios from "axios";
 
 function* loginAPI() {
   // 서버에 요청을 보내는 부분
@@ -57,6 +62,29 @@ function* helloSaga() {
   }
 }
 
+function* watchSignUp() {
+  yield takeEvery(SIGN_UP_REQUREST, signUp);
+}
+
+function singUpAPI() {
+  // 서버에 요청을 보내는 부분
+  return axios.post("/login");
+}
+
+function* signUp() {
+  try {
+    yield call(singUpAPI);
+    yield put({
+      type: SIGN_UP_SUCCESS
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: SIGN_UP_FAILURE
+    });
+  }
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogin)]);
+  yield all([fork(watchLogin), fork(watchSignUp)]);
 }
