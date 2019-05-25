@@ -13,7 +13,17 @@ export const initialState = {
   ], // 화면에 보일 포스트들
   imagePaths: [], // 미리보기 이미지 경로
   addPostErrorReason: "", // 포스트 업로트 실패 사유
-  isAddingPost: false // 포스트 업로드중
+  isAddingPost: false, // 포스트 업로드중
+  postAdded: false // 포스트 업로드 유무
+};
+
+const dummyPost = {
+  User: {
+    id: 1,
+    nickname: "더미더미"
+  },
+  createdAt: "2019-01-01",
+  content: "더미 게시글입니다"
 };
 
 // 포스트 추가
@@ -75,6 +85,29 @@ export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_POST_REQUEST: {
+      return {
+        ...state,
+        isAddingPost: true,
+        addPostErrorReason: "",
+        postAdded: false
+      };
+    }
+    case ADD_POST_SUCCESS: {
+      return {
+        ...state,
+        isAddingPost: false,
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true
+      };
+    }
+    case ADD_POST_FAILURE: {
+      return {
+        ...state,
+        isAddingPost: false,
+        addPostErrorReason: action.error
+      };
+    }
     default: {
       return {
         ...state
