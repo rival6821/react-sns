@@ -1,14 +1,15 @@
 const express = require("express");
-
+const db = require("./models");
+const userAPIRouter = require("./routes/user");
+const postsAPIRouter = require("./routes/posts");
+const postAPIRouter = require("./routes/post");
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("hello");
-});
+db.sequelize.sync();
 
-app.get("/about", (req, res) => {
-  res.send("about");
-});
+app.use("/api/user", userAPIRouter);
+app.use("/api/posts", postsAPIRouter);
+app.use("/api/post", postAPIRouter);
 
 app.listen(3065, () => {
   console.log(`server is running on http://localhost:3065`);
