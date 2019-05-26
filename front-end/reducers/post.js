@@ -5,25 +5,42 @@ export const initialState = {
         id: 1,
         nickname: "테스터"
       },
+      id: 1,
       createdAt: "2019-01-01",
       content: "테스트 게시글입니다",
+      Comments: [],
       img:
         "https://steemitimages.com/DQmd6twoohmFdKcACummtqLmXD913ss18quvY7epxN8akpo/image.png"
     }
   ], // 화면에 보일 포스트들
   imagePaths: [], // 미리보기 이미지 경로
-  addPostErrorReason: "", // 포스트 업로트 실패 사유
+  addPostErrorReason: "", // 포스트 업로드 실패 사유
   isAddingPost: false, // 포스트 업로드중
-  postAdded: false // 포스트 업로드 유무
+  postAdded: false, // 포스트 업로드 유무
+  isAddingComment: false, // 댓글 업로드중
+  addCommentErrorReason: "", // 댓글 업로드 실패 사유
+  commentAdded: false // 댓글 업로드 유무
 };
 
 const dummyPost = {
+  id: 2,
   User: {
     id: 1,
     nickname: "더미더미"
   },
   createdAt: "2019-01-01",
-  content: "더미 게시글입니다"
+  content: "더미 게시글입니다",
+  Comments: []
+};
+
+const dummyComment = {
+  id: 1,
+  User: {
+    id: 2,
+    nickname: "더미더미"
+  },
+  createdAt: new Date(),
+  content: "더미댓글"
 };
 
 // 포스트 추가
@@ -106,6 +123,36 @@ const reducer = (state = initialState, action) => {
         ...state,
         isAddingPost: false,
         addPostErrorReason: action.error
+      };
+    }
+    case ADD_COMMENT_REQUEST: {
+      return {
+        ...state,
+        isAddingComment: true,
+        addCommentErrorReason: "",
+        commentAdded: false
+      };
+    }
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(
+        v => v.id === action.data.postId
+      );
+      const post = state.mainPosts[postIndex];
+      const Comments = [...post.Comments, dummyComment];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Comments };
+      return {
+        ...state,
+        isAddingComment: false,
+        mainPosts,
+        commentAdded: true
+      };
+    }
+    case ADD_COMMENT_FAILURE: {
+      return {
+        ...state,
+        isAddingComment: false,
+        addCommentErrorReason: action.error
       };
     }
     default: {
