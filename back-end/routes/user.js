@@ -33,7 +33,15 @@ router.post("/", async (req, res, next) => {
 
 router.get("/:id", (req, res) => {});
 router.post("/logout", (req, res) => {});
-router.post("/login", (req, res) => {});
+
+// 로그인
+router.post("/login", (req, res, next) => {
+  try {
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 router.get("/:id/follow", (req, res) => {});
 router.post("/:id/follow", (req, res) => {});
 router.delete("/:id/follow", (req, res) => {});

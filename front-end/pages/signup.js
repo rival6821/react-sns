@@ -40,13 +40,13 @@ const SignUp = () => {
       dispatch({
         type: SIGN_UP_REQUREST,
         data: {
-          id,
+          userId: id,
           password,
-          nick
+          nickname: nick
         }
       });
     },
-    [password, passwordCheck, term]
+    [id, nick, password, passwordCheck, term]
   );
 
   // custom hook

@@ -4,7 +4,8 @@ import {
   takeLatest,
   put,
   takeEvery,
-  delay
+  delay,
+  call
 } from "redux-saga/effects";
 // fork : 함수실행, 비동기, 순서 필요없음
 // call : 함수실행, 동기, 응답을 받고 진행
@@ -18,7 +19,7 @@ import {
   SIGN_UP_FAILURE
 } from "../reducers/user";
 
-//import axios from "axios";
+import axios from "axios";
 
 // function loginAPI() {
 //   // 서버에 요청을 보내는 부분
@@ -52,15 +53,14 @@ function* watchSignUp() {
   yield takeEvery(SIGN_UP_REQUREST, signUp);
 }
 
-// function singUpAPI() {
-//   // 서버에 요청을 보내는 부분
-//   return axios.post("/login");
-// }
+function singUpAPI(signUpData) {
+  // 서버에 요청을 보내는 부분
+  return axios.post("http://localhost:3065/api/user/", signUpData);
+}
 
-function* signUp() {
+function* signUp(action) {
   try {
-    //yield call(singUpAPI);
-    yield delay(2000);
+    yield call(singUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS
     });
