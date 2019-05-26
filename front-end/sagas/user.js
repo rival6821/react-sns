@@ -4,7 +4,6 @@ import {
   takeLatest,
   put,
   takeEvery,
-  delay,
   call
 } from "redux-saga/effects";
 // fork : 함수실행, 비동기, 순서 필요없음
@@ -20,18 +19,19 @@ import {
 } from "../reducers/user";
 
 import axios from "axios";
+axios.defaults.baseURL = "http://localhost:3065/api";
 
-// function loginAPI() {
-//   // 서버에 요청을 보내는 부분
-//   return axios.post("/join");
-// }
+function loginAPI(loginData) {
+  // 서버에 요청을 보내는 부분
+  return axios.post(`/user/login`, loginData);
+}
 
-function* login() {
+function* login(action) {
   try {
-    //yield call(loginAPI);
-    yield delay(2000);
+    const result = yield call(loginAPI, action.data);
     yield put({
-      type: LOG_IN_SUCCESS
+      type: LOG_IN_SUCCESS,
+      data: result.data
     });
   } catch (e) {
     yield put({
@@ -55,7 +55,7 @@ function* watchSignUp() {
 
 function singUpAPI(signUpData) {
   // 서버에 요청을 보내는 부분
-  return axios.post("http://localhost:3065/api/user/", signUpData);
+  return axios.post("/user", signUpData);
 }
 
 function* signUp(action) {
