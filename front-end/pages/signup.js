@@ -19,7 +19,7 @@ const SignUp = () => {
   const [termError, setTermError] = useState(false);
 
   const dispatch = useDispatch();
-  const { isSingingUp, me } = useSelector(state => state.user);
+  const { isSingingUp, me, isSignedUp } = useSelector(state => state.user);
 
   useEffect(() => {
     if (me) {
@@ -27,6 +27,14 @@ const SignUp = () => {
       Router.push("/");
     }
   }, [me && me.id]);
+
+  // 회원가입 완료시
+  useEffect(() => {
+    if (isSignedUp) {
+      alert("회원가입이 완료되었습니다");
+      Router.push("/");
+    }
+  }, [isSignedUp]);
 
   const onSubmit = useCallback(
     e => {

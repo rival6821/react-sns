@@ -21,7 +21,12 @@ app.use(morgan("dev"));
 // body form 처리
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true
+  })
+);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   expressSession({
@@ -31,7 +36,8 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false // https쓸때 true로
-    }
+    },
+    name: "reactsns"
   })
 );
 // passport는 express-session다음에 넣기!
