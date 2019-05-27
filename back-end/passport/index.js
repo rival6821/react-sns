@@ -14,7 +14,25 @@ module.exports = () => {
       const user = await db.User.findOne({
         where: {
           id
-        }
+        },
+        include: [
+          {
+            model: db.Post,
+            as: "Posts",
+            attribute: ["id"]
+          },
+          {
+            model: db.User,
+            as: "Followings",
+            attribute: ["id"]
+          },
+          {
+            model: db.User,
+            as: "Followers",
+            attribute: ["id"]
+          }
+        ],
+        attribute: ["id", "nickname", "userId"]
       });
       return done(null, user); // req.user에 저장
     } catch (e) {

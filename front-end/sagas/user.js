@@ -13,24 +13,38 @@ import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
-  SIGN_UP_REQUREST,
+  SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
-  SIGN_UP_FAILURE
+  SIGN_UP_FAILURE,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  LOG_OUT_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE
 } from "../reducers/user";
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3065/api";
 
-function loginAPI(loginData) {
-  // 서버에 요청을 보내는 부분
-  return axios.post(`/user/login`, loginData, {
+// 로그인
+// LOG_IN액션이 실행되면 LOG_IN_SUCCESS액션이 자동으로 실행된다.
+// 한번만 하고 사라짐 계속 반복되게 하려면 while문 적용해야함 or takeEvery, takeLatest
+// takeEvery 는 누적O
+// takeLatest 는 누적x, 이전꺼가 안끈나면 이전거 취소
+function* watchLogIn() {
+  yield takeLatest(LOG_IN_REQUEST, logIn);
+}
+
+function logInAPI(logInData) {
+  return axios.post(`/user/login`, logInData, {
     withCredentials: true
   });
 }
 
-function* login(action) {
+function* logIn(action) {
   try {
-    const result = yield call(loginAPI, action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data
@@ -43,20 +57,12 @@ function* login(action) {
   }
 }
 
-// LOG_IN액션이 실행되면 LOG_IN_SUCCESS액션이 자동으로 실행된다.
-// 한번만 하고 사라짐 계속 반복되게 하려면 while문 적용해야함 or takeEvery, takeLatest
-// takeEvery 는 누적O
-// takeLatest 는 누적x, 이전꺼가 안끈나면 이전거 취소
-function* watchLogin() {
-  yield takeLatest(LOG_IN_REQUEST, login);
-}
-
+// 회원가입
 function* watchSignUp() {
-  yield takeEvery(SIGN_UP_REQUREST, signUp);
+  yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
 
 function singUpAPI(signUpData) {
-  // 서버에 요청을 보내는 부분
   return axios.post("/user", signUpData);
 }
 
@@ -74,6 +80,66 @@ function* signUp(action) {
   }
 }
 
+// 로그아웃
+function* watchLogOut() {
+  yield takeEvery(LOG_OUT_REQUEST, logOut);
+}
+
+function logOutAPI() {
+  return axios.post(
+    "/user/logout",
+    {},
+    {
+      withCredentials: true
+    }
+  );
+}
+
+function* logOut() {
+  try {
+    yield call(logOutAPI);
+    yield put({
+      type: LOG_OUT_SUCCESS
+    });
+  } catch (e) {
+    yield put({
+      type: LOG_OUT_FAILURE,
+      error: e
+    });
+  }
+}
+
+// 사용자 정보 가져오기
+function* watchLoadUser() {
+  yield takeEvery(LOAD_USER_REQUEST, loadUser);
+}
+
+function loadUserAPI() {
+  return axios.get("/user/", {
+    withCredentials: true
+  });
+}
+
+function* loadUser() {
+  try {
+    const result = yield call(loadUserAPI);
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      data: result.data
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: e
+    });
+  }
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogin), fork(watchSignUp)]);
+  yield all([
+    fork(watchLogIn),
+    fork(watchLogOut),
+    fork(watchLoadUser),
+    fork(watchSignUp)
+  ]);
 }

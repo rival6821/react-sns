@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "Followings",
       foreignKey: "followerId"
     });
+    // 다대다 관계에서는 foreignKey설정해 줘야함
   };
 
   return User;

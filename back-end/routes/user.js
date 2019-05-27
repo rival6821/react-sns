@@ -4,7 +4,15 @@ const passport = require("passport");
 const router = express.Router();
 const db = require("../models");
 
-router.get("/", (req, res) => {});
+// 유저정보 가져오기
+router.get("/", (req, res) => {
+  if (!req.user) {
+    return res.status(401).send("로그인이 필요합니다");
+  }
+  const user = Object.assign({}, req.user.toJSON());
+  delete user.password;
+  return res.json(user);
+});
 
 // 회원가입
 router.post("/", async (req, res, next) => {

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Form, Input, Checkbox, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { SIGN_UP_REQUREST } from "../reducers/user";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 import Router from "next/router";
 
 export const useInput = (initValue = null) => {
@@ -46,7 +46,7 @@ const SignUp = () => {
         return setTermError(true);
       }
       dispatch({
-        type: SIGN_UP_REQUREST,
+        type: SIGN_UP_REQUEST,
         data: {
           userId: id,
           password,
