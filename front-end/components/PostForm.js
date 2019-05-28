@@ -16,11 +16,14 @@ const PostForm = () => {
 
   const onSubmitForm = useCallback(
     e => {
+      if (!text || !text.trim()) {
+        return alert("내용을 입력해주세요");
+      }
       e.preventDefault();
       dispatch({
         type: ADD_POST_REQUEST,
         data: {
-          text
+          content: text
         }
       });
     },

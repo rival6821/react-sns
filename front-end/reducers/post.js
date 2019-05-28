@@ -1,18 +1,5 @@
 export const initialState = {
-  mainPosts: [
-    {
-      User: {
-        id: 1,
-        nickname: "테스터"
-      },
-      id: 1,
-      createdAt: "2019-01-01",
-      content: "테스트 게시글입니다",
-      Comments: [],
-      img:
-        "https://steemitimages.com/DQmd6twoohmFdKcACummtqLmXD913ss18quvY7epxN8akpo/image.png"
-    }
-  ], // 화면에 보일 포스트들
+  mainPosts: [], // 화면에 보일 포스트들
   imagePaths: [], // 미리보기 이미지 경로
   addPostErrorReason: "", // 포스트 업로드 실패 사유
   isAddingPost: false, // 포스트 업로드중
@@ -20,17 +7,6 @@ export const initialState = {
   isAddingComment: false, // 댓글 업로드중
   addCommentErrorReason: "", // 댓글 업로드 실패 사유
   commentAdded: false // 댓글 업로드 유무
-};
-
-const dummyPost = {
-  id: 2,
-  User: {
-    id: 1,
-    nickname: "더미더미"
-  },
-  createdAt: "2019-01-01",
-  content: "더미 게시글입니다",
-  Comments: []
 };
 
 const dummyComment = {
@@ -114,7 +90,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isAddingPost: false,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [action.data, ...state.mainPosts],
         postAdded: true
       };
     }
@@ -123,6 +99,23 @@ const reducer = (state = initialState, action) => {
         ...state,
         isAddingPost: false,
         addPostErrorReason: action.error
+      };
+    }
+    case LOAD_MAIN_POSTS_REQUEST: {
+      return {
+        ...state,
+        mainPosts: []
+      };
+    }
+    case LOAD_MAIN_POSTS_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: action.data
+      };
+    }
+    case LOAD_MAIN_POSTS_FAILURE: {
+      return {
+        ...state
       };
     }
     case ADD_COMMENT_REQUEST: {

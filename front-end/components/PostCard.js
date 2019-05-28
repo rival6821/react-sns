@@ -41,7 +41,7 @@ const PostCard = ({ post }) => {
   }, [commentAdded === true]);
 
   return (
-    <div>
+    <div style={{ marginBottom: 10 }}>
       <Card
         key={+post.createdAt}
         cover={post.img && <img alt="example" src={post.img} />}
