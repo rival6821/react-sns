@@ -9,7 +9,13 @@ import {
   ADD_COMMENT_FAILURE,
   LOAD_MAIN_POSTS_REQUEST,
   LOAD_MAIN_POSTS_SUCCESS,
-  LOAD_MAIN_POSTS_FAILURE
+  LOAD_MAIN_POSTS_FAILURE,
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
+  LOAD_HASHTAG_POSTS_REQUEST,
+  LOAD_HASHTAG_POSTS_SUCCESS,
+  LOAD_HASHTAG_POSTS_FAILURE
 } from "../reducers/post";
 
 // 게시글입력
@@ -62,6 +68,54 @@ function loadMainPostsAPI() {
   return axios.get("/posts");
 }
 
+// 해시태그 게시물 전부 가져오기
+function* watchLoadHashtagPosts() {
+  yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+}
+
+function* loadHashtagPosts(action) {
+  try {
+    const result = yield call(loadHashtagPostsAPI, action.data);
+    yield put({
+      type: LOAD_HASHTAG_POSTS_SUCCESS,
+      data: result.data
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_HASHTAG_POSTS_FAILURE,
+      error: e
+    });
+  }
+}
+
+function loadHashtagPostsAPI(tag) {
+  return axios.get(`/hashtag/${tag}`);
+}
+
+// 다른 사용자 게시물 전부 가져오기
+function* watchLoadUserPosts() {
+  yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts);
+}
+
+function* loadUserPosts(action) {
+  try {
+    const result = yield call(loadUserPostsAPI, action.data);
+    yield put({
+      type: LOAD_USER_POSTS_SUCCESS,
+      data: result.data
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_USER_POSTS_FAILURE,
+      error: e
+    });
+  }
+}
+
+function loadUserPostsAPI(id) {
+  return axios.get(`/uset/${id}/posts`);
+}
+
 // 댓글입력
 function addCommentAPI() {}
 
@@ -89,6 +143,8 @@ export default function* postSaga() {
   yield all([
     fork(watchAddPost),
     fork(watchLoadMainPosts),
-    fork(watchAddComment)
+    fork(watchAddComment),
+    fork(watchLoadHashtagPosts),
+    fork(watchLoadUserPosts)
   ]);
 }

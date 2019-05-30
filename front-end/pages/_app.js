@@ -9,7 +9,7 @@ import reducer from "../reducers";
 import rootSage from "../sagas";
 import createSagaMiddleware from "redux-saga";
 
-const Sns = ({ Component, store }) => {
+const Sns = ({ Component, store, pageProps }) => {
   return (
     <Provider store={store}>
       <Head>
@@ -21,7 +21,7 @@ const Sns = ({ Component, store }) => {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.js" />
       </Head>
       <Applayout>
-        <Component />
+        <Component {...pageProps} />
       </Applayout>
     </Provider>
   );
@@ -29,7 +29,19 @@ const Sns = ({ Component, store }) => {
 
 Sns.propTypes = {
   Component: PropTypes.elementType.isRequired,
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
+  pageProps: PropTypes.object.isRequired
+};
+
+// next 실행하면서 context를 넣어주는 부분
+Sns.getInitialProps = async context => {
+  console.log(context);
+  const { ctx, Component } = context;
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+  return { pageProps };
 };
 
 const configureStore = (initialState, options) => {
