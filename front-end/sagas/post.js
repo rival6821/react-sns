@@ -113,7 +113,7 @@ function* loadUserPosts(action) {
 }
 
 function loadUserPostsAPI(id) {
-  return axios.get(`/uset/${id}/posts`);
+  return axios.get(`/user/${id}/posts`);
 }
 
 // 댓글입력
